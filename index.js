@@ -1,10 +1,13 @@
+// Import statements
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const users = require("./routes/users");
 const posts = require("./routes/posts");
+const comments = require("./routes/comments")
 
 const error = require("./utilities/error");
+
 
 const app = express();
 const port = 3000;
@@ -53,6 +56,7 @@ app.use("/api", function (req, res, next) {
 // Use our Routes
 app.use("/api/users", users);
 app.use("/api/posts", posts);
+app.use("/api/comments", comments);
 
 // Adding some HATEOAS links.
 app.get("/", (req, res) => {

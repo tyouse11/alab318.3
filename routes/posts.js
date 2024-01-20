@@ -3,10 +3,23 @@ const router = express.Router();
 
 const posts = require("../data/posts");
 const error = require("../utilities/error");
+const users = require("../data/users");
 
 router
   .route("/")
   .get((req, res) => {
+    const userId = req.query.userId; // Get userId from the query parameter
+
+    if (!userId) {
+      return res.status(400).json({error: "userId parameter is required"});
+    }
+
+    // Convert userId to a number for comparison
+    const userIdNumber = parseInt(userId);
+
+    // Filter posts by userId
+    const userPosts = posts.filter((post) => post.userId === userIdNumber);
+    
     const links = [
       {
         href: "posts/:id",
@@ -15,7 +28,7 @@ router
       },
     ];
 
-    res.json({ posts, links });
+    res.json({ userPosts, links });
   })
   .post((req, res, next) => {
     if (req.body.userId && req.body.title && req.body.content) {
@@ -76,5 +89,7 @@ router
     if (post) res.json(post);
     else next();
   });
+
+
 
 module.exports = router;
